@@ -23,7 +23,7 @@ func main() {
 
 	// build model
 	model := elefas.NewModel[float32](1)
-	l := model.AddLayer(&elefas.FlattenLayer[float32]{}, nil)
+	l := model.AddLayer(&layer.Flatten[float32]{}, nil)
 	l = l.AddLayer(layer.NewDense(weights[0], weights[1]))
 	l = l.AddLayer(layer.NewReLUActivation[float32]())
 	l = l.AddLayer(layer.NewDense(weights[2], weights[3]))
