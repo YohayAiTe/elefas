@@ -68,61 +68,61 @@ func LoadNumpyDataFrame[T SizedNumber](r io.Reader) (DataFrame[T], error) {
 		if err != nil {
 			return df, err
 		}
-		castAndCopy(df.data, data)
+		castAndCopy(df.Data, data)
 	case "f4":
 		data, err := npyr.GetFloat32()
 		if err != nil {
 			return df, err
 		}
-		castAndCopy(df.data, data)
+		castAndCopy(df.Data, data)
 	case "u8":
 		data, err := npyr.GetUint64()
 		if err != nil {
 			return df, err
 		}
-		castAndCopy(df.data, data)
+		castAndCopy(df.Data, data)
 	case "u4":
 		data, err := npyr.GetUint32()
 		if err != nil {
 			return df, err
 		}
-		castAndCopy(df.data, data)
+		castAndCopy(df.Data, data)
 	case "u2":
 		data, err := npyr.GetUint16()
 		if err != nil {
 			return df, err
 		}
-		castAndCopy(df.data, data)
+		castAndCopy(df.Data, data)
 	case "u1":
 		data, err := npyr.GetUint8()
 		if err != nil {
 			return df, err
 		}
-		castAndCopy(df.data, data)
+		castAndCopy(df.Data, data)
 	case "i8":
 		data, err := npyr.GetInt64()
 		if err != nil {
 			return df, err
 		}
-		castAndCopy(df.data, data)
+		castAndCopy(df.Data, data)
 	case "i4":
 		data, err := npyr.GetInt32()
 		if err != nil {
 			return df, err
 		}
-		castAndCopy(df.data, data)
+		castAndCopy(df.Data, data)
 	case "i2":
 		data, err := npyr.GetInt16()
 		if err != nil {
 			return df, err
 		}
-		castAndCopy(df.data, data)
+		castAndCopy(df.Data, data)
 	case "i1":
 		data, err := npyr.GetInt8()
 		if err != nil {
 			return df, err
 		}
-		castAndCopy(df.data, data)
+		castAndCopy(df.Data, data)
 	}
 	return df, nil
 }
@@ -163,41 +163,41 @@ func SaveNumpyDataFrame[T SizedNumber](df DataFrame[T], w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	npyw.Shape = df.dims
+	npyw.Shape = df.Dims
 
 	// dataHeader := *(*reflect.SliceHeader)(unsafe.Pointer(&df.data))
-	dataPointer := unsafe.SliceData(df.data)
+	dataPointer := unsafe.SliceData(df.Data)
 	switch sizedNumberToDtype[T]() {
 	case "i1":
 		// return npyw.WriteInt8(*(*[]int8)(unsafe.Pointer(&dataHeader)))
-		return npyw.WriteInt8(unsafe.Slice((*int8)(unsafe.Pointer(dataPointer)), len(df.data)))
+		return npyw.WriteInt8(unsafe.Slice((*int8)(unsafe.Pointer(dataPointer)), len(df.Data)))
 	case "i2":
 		// return npyw.WriteInt16(*(*[]int16)(unsafe.Pointer(&dataHeader)))
-		return npyw.WriteInt16(unsafe.Slice((*int16)(unsafe.Pointer(dataPointer)), len(df.data)))
+		return npyw.WriteInt16(unsafe.Slice((*int16)(unsafe.Pointer(dataPointer)), len(df.Data)))
 	case "i4":
 		// return npyw.WriteInt32(*(*[]int32)(unsafe.Pointer(&dataHeader)))
-		return npyw.WriteInt32(unsafe.Slice((*int32)(unsafe.Pointer(dataPointer)), len(df.data)))
+		return npyw.WriteInt32(unsafe.Slice((*int32)(unsafe.Pointer(dataPointer)), len(df.Data)))
 	case "i8":
 		// return npyw.WriteInt64(*(*[]int64)(unsafe.Pointer(&dataHeader)))
-		return npyw.WriteInt64(unsafe.Slice((*int64)(unsafe.Pointer(dataPointer)), len(df.data)))
+		return npyw.WriteInt64(unsafe.Slice((*int64)(unsafe.Pointer(dataPointer)), len(df.Data)))
 	case "u1":
 		// return npyw.WriteUint8(*(*[]uint8)(unsafe.Pointer(&dataHeader)))
-		return npyw.WriteUint8(unsafe.Slice((*uint8)(unsafe.Pointer(dataPointer)), len(df.data)))
+		return npyw.WriteUint8(unsafe.Slice((*uint8)(unsafe.Pointer(dataPointer)), len(df.Data)))
 	case "u2":
 		// return npyw.WriteUint16(*(*[]uint16)(unsafe.Pointer(&dataHeader)))
-		return npyw.WriteUint16(unsafe.Slice((*uint16)(unsafe.Pointer(dataPointer)), len(df.data)))
+		return npyw.WriteUint16(unsafe.Slice((*uint16)(unsafe.Pointer(dataPointer)), len(df.Data)))
 	case "u4":
 		// return npyw.WriteUint32(*(*[]uint32)(unsafe.Pointer(&dataHeader)))
-		return npyw.WriteUint32(unsafe.Slice((*uint32)(unsafe.Pointer(dataPointer)), len(df.data)))
+		return npyw.WriteUint32(unsafe.Slice((*uint32)(unsafe.Pointer(dataPointer)), len(df.Data)))
 	case "u8":
 		// return npyw.WriteUint64(*(*[]uint64)(unsafe.Pointer(&dataHeader)))
-		return npyw.WriteUint64(unsafe.Slice((*uint64)(unsafe.Pointer(dataPointer)), len(df.data)))
+		return npyw.WriteUint64(unsafe.Slice((*uint64)(unsafe.Pointer(dataPointer)), len(df.Data)))
 	case "f4":
 		// return npyw.WriteFloat32(*(*[]float32)(unsafe.Pointer(&dataHeader)))
-		return npyw.WriteFloat32(unsafe.Slice((*float32)(unsafe.Pointer(dataPointer)), len(df.data)))
+		return npyw.WriteFloat32(unsafe.Slice((*float32)(unsafe.Pointer(dataPointer)), len(df.Data)))
 	case "f8":
 		// return npyw.WriteFloat64(*(*[]float64)(unsafe.Pointer(&dataHeader)))
-		return npyw.WriteFloat64(unsafe.Slice((*float64)(unsafe.Pointer(dataPointer)), len(df.data)))
+		return npyw.WriteFloat64(unsafe.Slice((*float64)(unsafe.Pointer(dataPointer)), len(df.Data)))
 	default:
 		panic("unknown number type")
 	}

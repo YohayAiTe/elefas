@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/YohayAiTe/elefas"
+	"github.com/YohayAiTe/elefas/layer"
 )
 
 func main() {
@@ -23,14 +24,14 @@ func main() {
 	// build model
 	model := elefas.NewModel[float32](1)
 	l := model.AddLayer(&elefas.FlattenLayer[float32]{}, nil)
-	l = l.AddLayer(elefas.NewDenseLayer(weights[0], weights[1]))
-	l = l.AddLayer(elefas.NewReLUActivation[float32]())
-	l = l.AddLayer(elefas.NewDenseLayer(weights[2], weights[3]))
-	l = l.AddLayer(elefas.NewReLUActivation[float32]())
-	l = l.AddLayer(elefas.NewDenseLayer(weights[4], weights[5]))
-	l = l.AddLayer(elefas.NewReLUActivation[float32]())
-	l = l.AddLayer(elefas.NewDenseLayer(weights[6], weights[7]))
-	l = l.AddLayer(&elefas.SoftmaxActivation[float32]{Axis: -1})
+	l = l.AddLayer(layer.NewDense(weights[0], weights[1]))
+	l = l.AddLayer(layer.NewReLUActivation[float32]())
+	l = l.AddLayer(layer.NewDense(weights[2], weights[3]))
+	l = l.AddLayer(layer.NewReLUActivation[float32]())
+	l = l.AddLayer(layer.NewDense(weights[4], weights[5]))
+	l = l.AddLayer(layer.NewReLUActivation[float32]())
+	l = l.AddLayer(layer.NewDense(weights[6], weights[7]))
+	l = l.AddLayer(&layer.SoftmaxActivation[float32]{Axis: -1})
 	model.SetOutput(l, 0)
 
 	// load the test data

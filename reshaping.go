@@ -7,10 +7,10 @@ func (fl FlattenLayer[T]) Apply(input DataFrame[T]) DataFrame[T] {
 		panic("cannot flatten dataframe with no dimensions")
 	} else if input.DimCount() == 1 {
 		output := MakeDataFrame[T]([]int{input.Dim(0), 1})
-		copy(output.data, input.data)
+		copy(output.Data, input.Data)
 		return output
 	}
 	output := MakeDataFrame[T]([]int{input.Dim(0), input.TotalSize() / input.Dim(0)})
-	copy(output.data, input.data)
+	copy(output.Data, input.Data)
 	return output
 }

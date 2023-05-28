@@ -11,8 +11,8 @@ type SizedNumber interface {
 }
 
 type DataFrame[T SizedNumber] struct {
-	dims []int
-	data []T
+	Dims []int
+	Data []T
 }
 
 func MakeDataFrame[T SizedNumber](dims []int) DataFrame[T] {
@@ -24,65 +24,65 @@ func MakeDataFrame[T SizedNumber](dims []int) DataFrame[T] {
 		totalSize *= dims[i]
 	}
 	return DataFrame[T]{
-		dims: dims,
-		data: make([]T, totalSize),
+		Dims: dims,
+		Data: make([]T, totalSize),
 	}
 }
 
-func (df DataFrame[T]) DimCount() int        { return len(df.dims) }
-func (df DataFrame[T]) Dim(i int) int        { return df.dims[i] }
-func (df DataFrame[T]) TotalSize() int       { return len(df.data) }
-func (df DataFrame[T]) FlatAt(i int) T       { return df.data[i] }
-func (df DataFrame[T]) SetFlatAt(v T, i int) { df.data[i] = v }
+func (df DataFrame[T]) DimCount() int        { return len(df.Dims) }
+func (df DataFrame[T]) Dim(i int) int        { return df.Dims[i] }
+func (df DataFrame[T]) TotalSize() int       { return len(df.Data) }
+func (df DataFrame[T]) FlatAt(i int) T       { return df.Data[i] }
+func (df DataFrame[T]) SetFlatAt(v T, i int) { df.Data[i] = v }
 
 func (df DataFrame[T]) Index(indices ...int) int {
-	if len(indices) != len(df.dims) {
+	if len(indices) != len(df.Dims) {
 		panic("number of indices does not match number of dims")
 	}
-	for i := 0; i < len(df.dims); i++ {
-		if indices[i] >= df.dims[i] {
-			panic(fmt.Sprintf("index %d is too big for dimension %d which is %d", indices[i], i, df.dims[i]))
+	for i := 0; i < len(df.Dims); i++ {
+		if indices[i] >= df.Dims[i] {
+			panic(fmt.Sprintf("index %d is too big for dimension %d which is %d", indices[i], i, df.Dims[i]))
 		}
 	}
 
 	idx := indices[0]
-	for i := 1; i < len(df.dims); i++ {
-		idx = df.dims[i]*idx + indices[i]
+	for i := 1; i < len(df.Dims); i++ {
+		idx = df.Dims[i]*idx + indices[i]
 	}
 	return idx
 }
 
-func (df DataFrame[T]) At(indices ...int) T       { return df.data[df.Index(indices...)] }
-func (df DataFrame[T]) SetAt(v T, indices ...int) { df.data[df.Index(indices...)] = v }
+func (df DataFrame[T]) At(indices ...int) T       { return df.Data[df.Index(indices...)] }
+func (df DataFrame[T]) SetAt(v T, indices ...int) { df.Data[df.Index(indices...)] = v }
 
 func (df DataFrame[T]) Sub(index int) DataFrame[T] {
-	size := df.TotalSize() / df.dims[0]
+	size := df.TotalSize() / df.Dims[0]
 	return DataFrame[T]{
-		dims: df.dims[1:],
-		data: df.data[size*index : size*(index+1)],
+		Dims: df.Dims[1:],
+		Data: df.Data[size*index : size*(index+1)],
 	}
 }
 func (df DataFrame[T]) Slice(start, end int) DataFrame[T] {
 	if start > end {
 		panic("start must be less than end")
 	}
-	ndims := make([]int, len(df.dims))
-	copy(ndims, df.dims)
+	ndims := make([]int, len(df.Dims))
+	copy(ndims, df.Dims)
 	ndims[0] = end - start
-	subSize := df.TotalSize() / df.dims[0]
+	subSize := df.TotalSize() / df.Dims[0]
 	return DataFrame[T]{
-		dims: ndims,
-		data: df.data[subSize*start : subSize*end],
+		Dims: ndims,
+		Data: df.Data[subSize*start : subSize*end],
 	}
 }
 
 func CastDf[T, U SizedNumber](df DataFrame[T]) DataFrame[U] {
 	res := DataFrame[U]{
-		dims: df.dims,
-		data: make([]U, len(df.data)),
+		Dims: df.Dims,
+		Data: make([]U, len(df.Data)),
 	}
-	for i := 0; i < len(df.data); i++ {
-		res.data[i] = U(df.data[i])
+	for i := 0; i < len(df.Data); i++ {
+		res.Data[i] = U(df.Data[i])
 	}
 	return res
 }
