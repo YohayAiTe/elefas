@@ -22,7 +22,8 @@ func TestLayerByPython[T elefas.SizedNumber](t *testing.T, pythonData PythonLaye
 
 	weightsFile, err := os.CreateTemp("testdata", "weights_*.npz")
 	if err != nil {
-		t.Fatalf("error creating temp weights file: %v", err)
+		wd, _ := os.Getwd()
+		t.Fatalf("error creating temp weights file: %v (current wd: %s)", err, wd)
 	}
 	defer func() {
 		name := weightsFile.Name()
